@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import DailyDoseWidget from "../components/DailyDoseWidget";
 
 export const metadata: Metadata = {
   title: "Veda in 60 Seconds - Ancient Wisdom in Modern Scroll",
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         {children}
+        <DailyDoseWidget />
       </body>
     </html>
   );

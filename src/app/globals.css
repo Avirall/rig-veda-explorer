@@ -116,3 +116,48 @@ body {
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   text-rendering: optimizeLegibility;
 }
+
+/* Vertical writing for side margins */
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Enhanced paper texture for notebook */
+.bg-paper-texture {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0),
+    linear-gradient(90deg, transparent 98%, rgba(139, 90, 43, 0.03) 100%),
+    linear-gradient(0deg, transparent 98%, rgba(139, 90, 43, 0.03) 100%);
+  background-size: 20px 20px, 100px 100px, 100px 100px;
+}
+
+/* Ink bleed effect */
+.ink-bleed {
+  background: radial-gradient(circle, rgba(139, 90, 43, 0.1) 0%, transparent 70%);
+}
+
+/* Notebook page flip animation */
+@keyframes pageFlip {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(-90deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+.page-flip {
+  animation: pageFlip 0.8s ease-in-out;
+}
+
+/* Dawn gradient colors for Daily Dose */
+.dawn-gradient {
+  background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 50%, #e0e7ff 100%);
+}
+
+/* Enhanced paper texture for Daily Dose */
+.daily-dose-texture {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0),
+    linear-gradient(90deg, transparent 98%, rgba(139, 90, 43, 0.02) 100%),
+    linear-gradient(0deg, transparent 98%, rgba(139, 90, 43, 0.02) 100%);
+  background-size: 15px 15px, 80px 80px, 80px 80px;
+}
