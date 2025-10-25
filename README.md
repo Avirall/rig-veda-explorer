@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rig Veda Explorer
 
-## Getting Started
+A beautiful, interactive exploration of the Rig Veda - the oldest collection of Sanskrit poetry.
 
-First, run the development server:
+## 🌱 Theme: "First Steps into the Rig Veda"
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project creates a delightful scroll-story experience that introduces visitors to the Rig Veda in under 60 seconds.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Veda in 60 Seconds** — Scroll-Story Experience
+  - Section 1: "What is the Rig Veda?" → Overview with key statistics
+  - Section 2: "Who are the Rishis?" → Interactive cards showing ancient seers
+  - Section 3: "What did they sing about?" → Animated deities (Agni, Indra, Ushas)
+  - Section 4: "Try listening to one" → Audio player with Gayatri Mantra
+  - Section 5: "Explore More" → Links to future interactive tools
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Design Features
 
-## Learn More
+- **Calm gradients** and paper-texture background
+- **Elegant typography** using Noto Serif Devanagari + Inter fonts
+- **Smooth animations** powered by Framer Motion
+- **Mobile-friendly** responsive design
+- **Museum-like experience** that comes alive
 
-To learn more about Next.js, take a look at the following resources:
+### Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js 16** with TypeScript
+- **Tailwind CSS** for styling
+- **Framer Motion** for animations
+- **Lucide React** for icons
+- **Pure static site** - no backend required
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Getting Started
 
-## Deploy on Vercel
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Project Goals
+
+- ✅ **Design**: Visual clarity, elegant typography, tasteful layout
+- ✅ **Usability**: Value in 30 seconds without reading a manual
+- ✅ **Performance**: Quick load, smooth interactions
+- ✅ **Rigor**: Correct references, honest framing
+- ✅ **Originality**: Fresh twist on ancient wisdom
+- ✅ **User delight**: "Wow, this is fun and insightful" factor
+
+### Data Sources
+
+This project uses only Rig Veda Samhita (Mandalas 1-10). Khilas are not included.
+
+### Privacy
+
+- **Zero user data collection**
+- **No login required**
+- **No paywall**
+- **Publicly accessible**
+
+### Future Enhancements
+
+- Dataset Explorer for browsing all 1,028 hymns
+- Interactive visualizations showing patterns
+- Search functionality by deity, rishi, or theme
+- Audio recordings of actual Rig Veda chanting
+
+### License
+
+This project respects copyright and uses only publicly available information about the Rig Veda.
+
+---
+
+Built with ❤️ for exploring ancient wisdom
