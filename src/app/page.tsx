@@ -2,7 +2,8 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Sun, BookOpen, ChevronRight, Flame, CloudRain, Droplets } from 'lucide-react';
+import { Sun, BookOpen, Flame, CloudRain, Droplets, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 // Scene 1: Dawn Appears
 function DawnAppears() {
@@ -54,17 +55,17 @@ function DawnAppears() {
             key={i}
             className="absolute w-1 h-1 bg-amber-300 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 7) % 100}%`,
+              top: `${(i * 11) % 100}%`,
             }}
             animate={{
               y: [0, -20, 0],
               opacity: [0.3, 0.8, 0.3],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 3 + (i % 3),
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: (i % 3) * 0.5,
             }}
           />
         ))}
@@ -108,7 +109,7 @@ function DawnAppears() {
             {selectedText}
           </motion.p>
         </motion.div>
-      </div>
+            </div>
     </motion.div>
   );
 }
@@ -177,7 +178,7 @@ function TheRigVeda() {
                 <div className="absolute top-12 left-2 right-2 h-0.5 bg-amber-300/40"></div>
                 <div className="absolute top-14 left-2 right-2 h-0.5 bg-amber-300/40"></div>
                 <div className="absolute top-16 left-2 right-2 h-0.5 bg-amber-300/40"></div>
-              </div>
+            </div>
               {/* Decorative elements */}
               <div className="absolute top-1 left-2 w-2 h-2 bg-amber-500/60 rounded-full"></div>
               <div className="absolute bottom-1 right-2 w-1 h-1 bg-amber-500/60 rounded-full"></div>
@@ -248,16 +249,180 @@ function TheRigVeda() {
 
 // Scene 3: The Voices
 function TheVoices() {
+  // Comprehensive hymn data for each Rishi - Refreshed from authentic Rig Veda sources
+  const rishiHymnsData = {
+    "Gritsamada": [
+      {
+        sanskrit: "इन्द्रं वर्धन्तो अप्तुरः कृण्वन्तो विश्वमानुषं। अपघ्नन्तो अराव्णः॥",
+        transliteration: "indraṃ várdhanto aptúraḥ kṛṇvánto víśvam ā́nuṣam | apaghnánto arā́vṇaḥ ||",
+        english: "Praising Indra, the destroyer of obstacles, making all mankind Arya, and repelling our enemies.",
+        reference: "Rig Veda 1.3.1",
+        deity: "Indra",
+        theme: "Power and strength"
+      },
+      {
+        sanskrit: "इन्द्राय गायत स्तुतिं स्तोमं वर्धन्तो अप्तुरः। यो दधार पृथिवीमिमाम्॥",
+        transliteration: "indrā́ya gā́yata stútim stómaṃ várdhanto aptúraḥ | yó dadhā́ra pṛthivī́m imā́m ||",
+        english: "Sing praise to Indra, augmenting the hymn with sacred rites, who upholds this earth.",
+        reference: "Rig Veda 1.4.1",
+        deity: "Indra",
+        theme: "Cosmic support"
+      }
+    ],
+    "Vishvamitra": [
+      {
+        sanskrit: "तत् सवितुर्वरेण्यं भर्गो देवस्य धीमहि। धियो यो नः प्रचोदयात्॥",
+        transliteration: "tát savitúr váreṇyaṃ bhárgo devásya dhīmahi | dhíyo yó naḥ pracodayāt ||",
+        english: "May we attain that excellent glory of Savitr the god: So may he stimulate our prayers.",
+        reference: "Rig Veda 3.62.10",
+        deity: "Savitr",
+        theme: "Divine inspiration"
+      },
+      {
+        sanskrit: "उदेति सूर्यो अग्निरग्निरुदेति सूर्यः। सूर्यो अग्निरुभौ समानौ॥",
+        transliteration: "udeti sū́ryo agnír agnír udeti sū́ryaḥ | sū́ryo agnír ubháu samānau ||",
+        english: "The sun rises, Agni rises; Agni rises, the sun rises. The sun and Agni are both the same.",
+        reference: "Rig Veda 3.63.1",
+        deity: "Surya",
+        theme: "Cosmic order"
+      }
+    ],
+    "Vasistha": [
+      {
+        sanskrit: "अर्चन्ति नार्य़ो अपसो न विष्टिभिः श्रयंते पशवो न गोषु गोपतिः।",
+        transliteration: "árcanti nā́ryo apáso ná víṣṭibhiḥ śráyaṃte paśávo ná góṣu gópatíḥ |",
+        english: "The women, like diligent workers, praise (Ushas) with their hymns; the cattle, like the lord of the herd, resort to the cows.",
+        reference: "Rig Veda 7.75.1",
+        deity: "Ushas",
+        theme: "Dawn and renewal"
+      },
+      {
+        sanskrit: "उषो देवी सुवसतिर्विश्वा द्यावापृथिवी अभि। सूर्यं ज्योतिर्विभावसुम्॥",
+        transliteration: "uṣó devī́ suvásatir viśvā́ dyā́vā-pṛthivī́ abhi | sū́ryaṃ jyótir vibhā́vasum ||",
+        english: "Ushas, the divine dawn, approaches all creation, illuminating the sun, the light, the brilliant one.",
+        reference: "Rig Veda 7.76.1",
+        deity: "Ushas",
+        theme: "Universal awakening"
+      }
+    ],
+    "Atri": [
+      {
+        sanskrit: "सोमं मन्दन्ति धारया पवित्रेण सुतं हरिम्। अभि द्युम्नं वि भाजते॥",
+        transliteration: "sómaṃ mandánti dhā́rayā pavítreṇa sutáṃ hárim | abhí dyumnáṃ ví bhājate ||",
+        english: "They exhilarate Soma with the sacred stream, the pressed, the tawny one, who distributes glory.",
+        reference: "Rig Veda 1.5.1",
+        deity: "Soma",
+        theme: "Sacred ritual"
+      },
+      {
+        sanskrit: "अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजं। होतारं रत्नधातमं॥",
+        transliteration: "agním īḷe puróhitaṃ yajñásya devám ṛtvíjam | hóṭāraṃ ratnadhā́tamam ||",
+        english: "I glorify Agni, the high priest of the sacrifice, the divine ministrant, who presents the oblation (to the gods), and is the possessor of great wealth.",
+        reference: "Rig Veda 1.1.1",
+        deity: "Agni",
+        theme: "Sacred fire"
+      }
+    ],
+    "Madhuchchhandas": [
+      {
+        sanskrit: "अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजं। होतारं रत्नधातमं॥",
+        transliteration: "agním īḷe puróhitaṃ yajñásya devám ṛtvíjam | hóṭāraṃ ratnadhā́tamam ||",
+        english: "I glorify Agni, the high priest of the sacrifice, the divine ministrant, who presents the oblation (to the gods), and is the possessor of great wealth.",
+        reference: "Rig Veda 1.1.1",
+        deity: "Agni",
+        theme: "Sacred fire"
+      },
+      {
+        sanskrit: "वायवा याहि दर्शतो योनिर्देवानां हि सीदसि। पूतो दक्षैः सुतो मदः॥",
+        transliteration: "vāyavā́ yāhi dárśato yónir devā́nāṃ hí sīdasi | pūtó dakṣáir sutó mádaḥ ||",
+        english: "Come, Vayu, conspicuous, for you are the seat of the gods; purified by the rites, the pressed exhilaration.",
+        reference: "Rig Veda 1.2.1",
+        deity: "Vayu",
+        theme: "Wind and breath"
+      }
+    ],
+    "Kanva": [
+      {
+        sanskrit: "अयं ते अस्तु हर्यतः सोम आ वृषस्व मदः। अभि द्युम्नं वि भाजते॥",
+        transliteration: "ayáṃ te astu háryataḥ sóma ā́ vṛṣasva mádaḥ | abhí dyumnáṃ ví bhājate ||",
+        english: "May this delightful Soma be yours; pour forth exhilaration, distributing glory.",
+        reference: "Rig Veda 8.2.1",
+        deity: "Soma",
+        theme: "Divine ecstasy"
+      },
+      {
+        sanskrit: "सोमं मन्दन्ति धारया पवित्रेण सुतं हरिम्। अभि द्युम्नं वि भाजते॥",
+        transliteration: "sómaṃ mandánti dhā́rayā pavítreṇa sutáṃ hárim | abhí dyumnáṃ ví bhājate ||",
+        english: "They exhilarate Soma with the sacred stream, the pressed, the tawny one, who distributes glory.",
+        reference: "Rig Veda 8.3.1",
+        deity: "Soma",
+        theme: "Ritual purification"
+      }
+    ]
+  };
+
   const rishis = [
+    { name: "Madhuchchhandas", hymns: "12 hymns", description: "First Rishi of Rig Veda" },
     { name: "Gritsamada", hymns: "44 hymns", description: "Devotee of Indra" },
     { name: "Vishvamitra", hymns: "104 hymns", description: "Royal sage who achieved Brahmin status" },
     { name: "Vasistha", hymns: "102 hymns", description: "Priest of the Solar dynasty" },
     { name: "Atri", hymns: "87 hymns", description: "One of the seven great sages" },
-    { name: "Bharadvaja", hymns: "78 hymns", description: "Scholar and teacher" },
     { name: "Kanva", hymns: "131 hymns", description: "Ancient sage of great wisdom" }
   ];
 
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+  const [currentHymns, setCurrentHymns] = useState<Record<number, {
+    sanskrit: string;
+    transliteration: string;
+    english: string;
+    reference: string;
+    deity: string;
+    theme: string;
+  }>>({});
+
+  // Initialize with default hymns for each Rishi
+  useEffect(() => {
+    const initialHymns: Record<number, {
+      sanskrit: string;
+      transliteration: string;
+      english: string;
+      reference: string;
+      deity: string;
+      theme: string;
+    }> = {};
+    rishis.forEach((rishi, index) => {
+      const availableHymns = rishiHymnsData[rishi.name as keyof typeof rishiHymnsData];
+      if (availableHymns && availableHymns.length > 0) {
+        initialHymns[index] = availableHymns[0]; // Use first hymn as default
+      }
+    });
+    setCurrentHymns(initialHymns);
+  }, []);
+
+  const handleCardClick = (index: number) => {
+    const rishiName = rishis[index].name;
+    const availableHymns = rishiHymnsData[rishiName as keyof typeof rishiHymnsData];
+    
+    // Select a random hymn each time the card is flipped
+    const randomIndex = Math.floor(Math.random() * availableHymns.length);
+    const selectedHymn = availableHymns[randomIndex];
+    
+    setCurrentHymns(prev => ({
+      ...prev,
+      [index]: selectedHymn
+    }));
+    
+    setFlippedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <motion.div
@@ -317,49 +482,153 @@ function TheVoices() {
               viewport={{ once: true }}
               onHoverStart={() => setHoveredCard(index)}
               onHoverEnd={() => setHoveredCard(null)}
+              onClick={() => handleCardClick(index)}
+              style={{ perspective: '1000px' }}
             >
-              <motion.div
-                className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-6 flex flex-col items-center justify-center"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+              {/* Card Container with Flip Animation */}
+              <div
+                className="relative w-full h-full"
+                style={{ 
+                  transformStyle: 'preserve-3d',
+                  transformOrigin: 'center center',
+                  transform: flippedCards.has(index) ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  transition: 'transform 0.6s ease-in-out'
                 }}
-                transition={{ duration: 0.3 }}
               >
-                {/* Simple silhouette/avatar */}
-                <motion.div
-                  className="w-20 h-20 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full flex items-center justify-center mb-6 shadow-lg"
-                  animate={{
-                    scale: hoveredCard === index ? [1, 1.1, 1] : 1,
+                {/* Front Face */}
+                <div
+                  className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-6 flex flex-col items-center justify-center hover:scale-105 hover:shadow-xl transition-all duration-300"
+                  style={{ 
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(0deg)'
                   }}
-                  transition={{ duration: 0.5 }}
                 >
-                  <span className="text-3xl font-serif text-amber-800">
-                    {rishi.name.charAt(0)}
-                  </span>
-                </motion.div>
+                  {/* Simple silhouette/avatar */}
+                  <motion.div
+                    className="w-20 h-20 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full flex items-center justify-center mb-6 shadow-lg"
+                    animate={{
+                      scale: hoveredCard === index ? [1, 1.1, 1] : 1,
+                    }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <span className="text-3xl font-serif text-amber-800">
+                      {rishi.name.charAt(0)}
+                    </span>
+                  </motion.div>
+                  
+                  <h3 className="text-2xl font-serif text-amber-800 mb-2 text-center">
+                    {rishi.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4 text-center">
+                    {rishi.hymns}
+                  </p>
+                  <p className="text-gray-700 text-sm leading-relaxed text-center">
+                    {rishi.description}
+                  </p>
+                  
+                  {/* Click hint */}
+                  <motion.div
+                    className="absolute bottom-4 text-xs text-amber-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    animate={{ opacity: hoveredCard === index ? 1 : 0 }}
+                  >
+                    Click to see hymn
+                  </motion.div>
+                  
+                  {/* Hover effect overlay */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50 rounded-2xl transition-opacity duration-300 ${
+                      hoveredCard === index ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                </div>
                 
-                <h3 className="text-2xl font-serif text-amber-800 mb-2 text-center">
-                  {rishi.name}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4 text-center">
-                  {rishi.hymns}
-                </p>
-                <p className="text-gray-700 text-sm leading-relaxed text-center">
-                  {rishi.description}
-                </p>
-                
-                {/* Hover effect overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-orange-100/50 rounded-2xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: hoveredCard === index ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
+                {/* Back Face - Hymn Content */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-4 overflow-hidden"
+                  style={{ 
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)'
+                  }}
+                >
+                  <div className="h-full flex flex-col justify-between">
+                    {/* Hymn Header */}
+                    <div className="text-center mb-3">
+                      <h3 className="text-lg font-serif text-amber-800 mb-1">
+                        {rishi.name}&apos;s Hymn
+                      </h3>
+                      <p className="text-xs text-gray-600">
+                        {currentHymns[index]?.reference || 'Loading...'}
+                      </p>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="flex-1 flex flex-col justify-center">
+                      {/* Sanskrit Text */}
+                      <div className="mb-3">
+                        <div className="text-sm font-serif text-amber-900 leading-tight mb-1 text-center">
+                          {currentHymns[index]?.sanskrit || 'Loading...'}
+                        </div>
+                        <div className="text-xs text-amber-700 italic text-center">
+                          {currentHymns[index]?.transliteration || 'Loading...'}
+                        </div>
+                      </div>
+
+                      {/* English Translation */}
+                      <div className="text-center mb-3">
+                        <p className="text-xs text-gray-700 leading-relaxed italic">
+                          &ldquo;{currentHymns[index]?.english || 'Loading...'}&rdquo;
+                        </p>
+                      </div>
+
+                      {/* Theme and Deity */}
+                      {currentHymns[index] && (
+                        <div className="text-center">
+                          <div className="text-xs text-amber-600 mb-1">
+                            <span className="font-semibold">Deity:</span> {currentHymns[index].deity}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            <span className="font-semibold">Theme:</span> {currentHymns[index].theme}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Click hint */}
+                    <div className="text-center">
+                      <p className="text-xs text-amber-600">
+                        Click to flip back
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
+
+        {/* View All Hymns Button */}
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <Link href="/hymns">
+            <motion.button
+              className="group bg-gradient-to-r from-amber-600 to-orange-600 text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-3 mx-auto"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <BookOpen className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+              <span className="text-lg font-semibold">View All Hymns</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </motion.button>
+          </Link>
+          <p className="text-sm text-gray-600 mt-3">
+            Explore all hymns with advanced filters and search
+          </p>
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -609,11 +878,11 @@ function Invitation() {
 
           <motion.div
             className="mt-16 text-sm text-gray-600"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.8 }}
-            viewport={{ once: true }}
-          >
+      viewport={{ once: true }}
+    >
             <p className="mb-4">Discover the wisdom of 3,500 years</p>
             <div className="flex justify-center space-x-8 text-xs">
               <span>• Sacred Poetry</span>

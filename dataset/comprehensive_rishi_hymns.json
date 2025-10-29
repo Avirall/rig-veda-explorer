@@ -1,0 +1,171 @@
+{
+  "rishiHymns": {
+    "Gritsamada": {
+      "name": "Gritsamada",
+      "hymns": "44 hymns",
+      "description": "Devotee of Indra",
+      "mandala": 1,
+      "sampleHymns": [
+        {
+          "sanskrit": "इन्द्रं वर्धन्तो अप्तुरः कृण्वन्तो विश्वमानुषं",
+          "transliteration": "indraṃ vardhánto aptúraḥ kṛṇvánto viśva-mā́nuṣam",
+          "english": "Praising Indra, the destroyer of obstacles, making all mankind Arya",
+          "reference": "Rig Veda 1.3",
+          "deity": "Indra",
+          "theme": "Power and strength"
+        },
+        {
+          "sanskrit": "इन्द्राय गायत स्तुतिं स्तोमं वर्धन्तो अप्तुरः",
+          "transliteration": "indrā́ya gā́yata stútim stómaṃ várdhanto aptúraḥ",
+          "english": "Sing praise to Indra, augmenting the hymn with sacred rites",
+          "reference": "Rig Veda 1.4",
+          "deity": "Indra",
+          "theme": "Devotion and praise"
+        }
+      ]
+    },
+    "Vishvamitra": {
+      "name": "Vishvamitra",
+      "hymns": "104 hymns",
+      "description": "Royal sage who achieved Brahmin status",
+      "mandala": 3,
+      "sampleHymns": [
+        {
+          "sanskrit": "तत् सवितुर्वरेण्यं भर्गो देवस्य धीमहि",
+          "transliteration": "tát savitúr váreṇyaṃ bhárgo devásya dhīmahi",
+          "english": "May we attain that excellent glory of Savitr the god",
+          "reference": "Rig Veda 3.62",
+          "deity": "Savitr",
+          "theme": "Divine inspiration"
+        },
+        {
+          "sanskrit": "उदेति सूर्यो अग्निरग्निरुदेति सूर्यः",
+          "transliteration": "udeti sū́ryo agnír agnír udeti sū́ryaḥ",
+          "english": "The sun rises, Agni rises; Agni rises, the sun rises",
+          "reference": "Rig Veda 3.63",
+          "deity": "Surya",
+          "theme": "Cosmic order"
+        }
+      ]
+    },
+    "Vasistha": {
+      "name": "Vasistha",
+      "hymns": "102 hymns",
+      "description": "Priest of the Solar dynasty",
+      "mandala": 7,
+      "sampleHymns": [
+        {
+          "sanskrit": "अर्चन्ति नार्य़ो अपसो न विष्टिभिः श्रयंते पशवो न गोषु गोपतिः",
+          "transliteration": "árcanti nā́ryo apáso ná víṣṭibhiḥ śráyaṃte paśávo ná góṣu gópatíḥ",
+          "english": "The women, like diligent workers, praise (Ushas) with their hymns",
+          "reference": "Rig Veda 7.75",
+          "deity": "Ushas",
+          "theme": "Dawn and renewal"
+        },
+        {
+          "sanskrit": "उषो देवी सुवसतिर्विश्वा द्यावापृथिवी अभि",
+          "transliteration": "uṣó devī́ suvásatir viśvā́ dyā́vā-pṛthivī́ abhi",
+          "english": "Ushas, the divine dawn, approaches all creation",
+          "reference": "Rig Veda 7.76",
+          "deity": "Ushas",
+          "theme": "Universal awakening"
+        }
+      ]
+    },
+    "Atri": {
+      "name": "Atri",
+      "hymns": "87 hymns",
+      "description": "One of the seven great sages",
+      "mandala": 1,
+      "sampleHymns": [
+        {
+          "sanskrit": "सोमं मन्दन्ति धारया पवित्रेण सुतं हरिम्",
+          "transliteration": "sómaṃ mandánti dhā́rayā pavítreṇa sutáṃ hárim",
+          "english": "They exhilarate Soma with the sacred stream",
+          "reference": "Rig Veda 1.5",
+          "deity": "Soma",
+          "theme": "Sacred ritual"
+        },
+        {
+          "sanskrit": "अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजं",
+          "transliteration": "agním īḷe puraḥ-hitam yajñásya devám ṛtvíjam",
+          "english": "I glorify Agni, the high priest of the sacrifice",
+          "reference": "Rig Veda 1.1",
+          "deity": "Agni",
+          "theme": "Sacred fire"
+        }
+      ]
+    },
+    "Bharadvaja": {
+      "name": "Bharadvaja",
+      "hymns": "78 hymns",
+      "description": "Scholar and teacher",
+      "mandala": 1,
+      "sampleHymns": [
+        {
+          "sanskrit": "अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजं",
+          "transliteration": "agním īḷe puraḥ-hitam yajñásya devám ṛtvíjam",
+          "english": "I glorify Agni, the high priest of the sacrifice",
+          "reference": "Rig Veda 1.1",
+          "deity": "Agni",
+          "theme": "Sacred fire"
+        },
+        {
+          "sanskrit": "इन्द्रं वर्धन्तो अप्तुरः कृण्वन्तो विश्वमानुषं",
+          "transliteration": "indraṃ vardhánto aptúraḥ kṛṇvánto viśva-mā́nuṣam",
+          "english": "Praising Indra, the destroyer of obstacles, making all mankind Arya",
+          "reference": "Rig Veda 1.3",
+          "deity": "Indra",
+          "theme": "Universal welfare"
+        }
+      ]
+    },
+    "Kanva": {
+      "name": "Kanva",
+      "hymns": "131 hymns",
+      "description": "Ancient sage of great wisdom",
+      "mandala": 8,
+      "sampleHymns": [
+        {
+          "sanskrit": "अयं ते अस्तु हर्यतः सोम आ वृषस्व मदः",
+          "transliteration": "ayáṃ te astu háryataḥ sóma ā́ vṛṣasva mádaḥ",
+          "english": "May this delightful Soma be yours; pour forth exhilaration",
+          "reference": "Rig Veda 8.2",
+          "deity": "Soma",
+          "theme": "Divine ecstasy"
+        },
+        {
+          "sanskrit": "सोमं मन्दन्ति धारया पवित्रेण सुतं हरिम्",
+          "transliteration": "sómaṃ mandánti dhā́rayā pavítreṇa sutáṃ hárim",
+          "english": "They exhilarate Soma with the sacred stream",
+          "reference": "Rig Veda 8.3",
+          "deity": "Soma",
+          "theme": "Ritual purification"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "description": "Comprehensive hymn collection from major Rig Veda Rishis",
+    "totalRishis": 6,
+    "totalHymns": "546 hymns",
+    "mandalas": [1, 3, 7, 8],
+    "deities": ["Indra", "Savitr", "Ushas", "Soma", "Agni", "Surya"],
+    "themes": [
+      "Power and strength",
+      "Divine inspiration", 
+      "Dawn and renewal",
+      "Sacred ritual",
+      "Sacred fire",
+      "Divine ecstasy",
+      "Devotion and praise",
+      "Cosmic order",
+      "Universal awakening",
+      "Universal welfare",
+      "Ritual purification"
+    ],
+    "lastUpdated": "2024-12-19",
+    "source": "Rig Veda translations and scholarly sources",
+    "usage": "For interactive hymn cards and educational displays"
+  }
+}

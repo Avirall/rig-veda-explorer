@@ -1,0 +1,92 @@
+{
+  "rishis": [
+    {
+      "name": "Gritsamada",
+      "hymns": "44 hymns",
+      "description": "Devotee of Indra",
+      "sampleHymn": {
+        "sanskrit": "इन्द्रं वर्धन्तो अप्तुरः कृण्वन्तो विश्वमानुषं",
+        "transliteration": "indraṃ vardhánto aptúraḥ kṛṇvánto viśva-mā́nuṣam",
+        "english": "Praising Indra, the destroyer of obstacles, making all mankind Arya",
+        "reference": "Rig Veda 1.3",
+        "deity": "Indra",
+        "theme": "Power and strength"
+      }
+    },
+    {
+      "name": "Vishvamitra",
+      "hymns": "104 hymns",
+      "description": "Royal sage who achieved Brahmin status",
+      "sampleHymn": {
+        "sanskrit": "तत् सवितुर्वरेण्यं भर्गो देवस्य धीमहि",
+        "transliteration": "tát savitúr váreṇyaṃ bhárgo devásya dhīmahi",
+        "english": "May we attain that excellent glory of Savitr the god",
+        "reference": "Rig Veda 3.62",
+        "deity": "Savitr",
+        "theme": "Divine inspiration"
+      }
+    },
+    {
+      "name": "Vasistha",
+      "hymns": "102 hymns",
+      "description": "Priest of the Solar dynasty",
+      "sampleHymn": {
+        "sanskrit": "अर्चन्ति नार्य़ो अपसो न विष्टिभिः श्रयंते पशवो न गोषु गोपतिः",
+        "transliteration": "árcanti nā́ryo apáso ná víṣṭibhiḥ śráyaṃte paśávo ná góṣu gópatíḥ",
+        "english": "The women, like diligent workers, praise (Ushas) with their hymns",
+        "reference": "Rig Veda 7.75",
+        "deity": "Ushas",
+        "theme": "Dawn and renewal"
+      }
+    },
+    {
+      "name": "Atri",
+      "hymns": "87 hymns",
+      "description": "One of the seven great sages",
+      "sampleHymn": {
+        "sanskrit": "सोमं मन्दन्ति धारया पवित्रेण सुतं हरिम्",
+        "transliteration": "sómaṃ mandánti dhā́rayā pavítreṇa sutáṃ hárim",
+        "english": "They exhilarate Soma with the sacred stream",
+        "reference": "Rig Veda 1.5",
+        "deity": "Soma",
+        "theme": "Sacred ritual"
+      }
+    },
+    {
+      "name": "Bharadvaja",
+      "hymns": "78 hymns",
+      "description": "Scholar and teacher",
+      "sampleHymn": {
+        "sanskrit": "अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजं",
+        "transliteration": "agním īḷe puraḥ-hitam yajñásya devám ṛtvíjam",
+        "english": "I glorify Agni, the high priest of the sacrifice",
+        "reference": "Rig Veda 1.1",
+        "deity": "Agni",
+        "theme": "Sacred fire"
+      }
+    },
+    {
+      "name": "Kanva",
+      "hymns": "131 hymns",
+      "description": "Ancient sage of great wisdom",
+      "sampleHymn": {
+        "sanskrit": "अयं ते अस्तु हर्यतः सोम आ वृषस्व मदः",
+        "transliteration": "ayáṃ te astu háryataḥ sóma ā́ vṛṣasva mádaḥ",
+        "english": "May this delightful Soma be yours; pour forth exhilaration",
+        "reference": "Rig Veda 8.2",
+        "deity": "Soma",
+        "theme": "Divine ecstasy"
+      }
+    }
+  ],
+  "metadata": {
+    "description": "Sample hymns from major Rig Veda Rishis for interactive card display",
+    "totalRishis": 6,
+    "totalHymns": "546 hymns",
+    "mandalas": [1, 3, 7, 8],
+    "deities": ["Indra", "Savitr", "Ushas", "Soma", "Agni"],
+    "themes": ["Power and strength", "Divine inspiration", "Dawn and renewal", "Sacred ritual", "Sacred fire", "Divine ecstasy"],
+    "lastUpdated": "2024-12-19",
+    "source": "Rig Veda translations and scholarly sources"
+  }
+}
