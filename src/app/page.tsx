@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Sun, BookOpen, Flame, CloudRain, Droplets, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import { AnimatePresence } from 'framer-motion';
 // Scene 1: Dawn Appears
 function DawnAppears() {
   // Dawn texts from the actual Rig Veda dataset
-  const dawnTexts = [
+  const dawnTexts = React.useMemo(() => [
     "We approach you, Agni, with reverential homage in our thoughts, daily, both morning and evening.",
     "Let the wise invoker bring hither from the shining sphere of the sun, all the divinities awaking with the dawn.",
     "We invoke Indra at the morning rite, we invoke him at the succeeding sacrifice.",
@@ -22,12 +23,15 @@ function DawnAppears() {
     "Uṣas, daughter of heaven, dawn upon us with riches; diffuser of light, dawn upon us with abundant food.",
     "The divine Uṣas has dwelt in heaven of old; may she dawn today, the excitress of chariots.",
     "There was light to irradiate the dawn; the sun rose like god; the fire shone with darkened flames."
-  ];
+  ], []);
 
-  // Randomly select a text each time
-  const [selectedText] = useState(() => 
-    dawnTexts[Math.floor(Math.random() * dawnTexts.length)]
-  );
+  // Randomly select a text on client after mount to avoid SSR/CSR mismatch
+  const [selectedText, setSelectedText] = useState<string>("");
+  useEffect(() => {
+    const idx = Math.floor(Math.random() * dawnTexts.length);
+    // eslint-disable-next-line
+    setSelectedText(dawnTexts[idx]);
+  }, [dawnTexts]);
 
   return (
     <motion.div
@@ -107,7 +111,8 @@ function DawnAppears() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
-            {selectedText}
+            {/* suppressHydrationWarning ensures no hydration error if empty during SSR */}
+            <span suppressHydrationWarning>{selectedText || "\u00A0"}</span>
           </motion.p>
         </motion.div>
             </div>
@@ -209,7 +214,7 @@ function TheRigVeda() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
-            10 Mandalas, 1,028 hymns, 10,000 verses — world's oldest Sanskrit poetry.
+            10 Mandalas, 1,028 hymns, 10,000 verses — world&rsquo;s oldest Sanskrit poetry.
           </motion.p>
           
           {/* Stats with animation */}
@@ -399,6 +404,7 @@ function TheVoices() {
       }
     });
     setCurrentHymns(initialHymns);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCardClick = (index: number) => {
@@ -434,23 +440,23 @@ function TheVoices() {
       viewport={{ once: true }}
     >
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 opacity-10">
         {[...Array(50)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-2 h-2 bg-amber-600 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 13) % 100}%`,
+              top: `${(i * 29) % 100}%`,
             }}
             animate={{
               scale: [0, 1, 0],
               opacity: [0, 0.5, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 3 + (i % 5) * 0.4,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: (i % 6) * 0.3,
             }}
           />
         ))}
@@ -548,7 +554,8 @@ function TheVoices() {
                   className="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-4 overflow-hidden"
                   style={{ 
                     backfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)'
+                    transform: 'rotateY(180deg)',
+                    willChange: 'transform'
                   }}
                 >
                   <div className="h-full flex flex-col justify-between">
@@ -563,22 +570,22 @@ function TheVoices() {
                     </div>
 
                     {/* Content Area */}
-                    <div className="flex-1 flex flex-col justify-center">
-                      {/* Sanskrit Text */}
-                      <div className="mb-3">
-                        <div className="text-sm font-serif text-amber-900 leading-tight mb-1 text-center">
+                    <div className="flex-1 flex flex-col justify-start">
+                      <div className="space-y-2 overflow-auto max-h-48 pr-2">
+                        {/* Sanskrit Text */}
+                        <div className="text-sm font-serif text-amber-900 leading-tight text-center break-words whitespace-pre-wrap">
                           {currentHymns[index]?.sanskrit || 'Loading...'}
                         </div>
-                        <div className="text-xs text-amber-700 italic text-center">
+                        {/* Transliteration */}
+                        <div className="text-xs text-amber-700 italic text-center break-words whitespace-pre-wrap leading-tight">
                           {currentHymns[index]?.transliteration || 'Loading...'}
                         </div>
-                      </div>
-
-                      {/* English Translation */}
-                      <div className="text-center mb-3">
-                        <p className="text-xs text-gray-700 leading-relaxed italic">
-                          &ldquo;{currentHymns[index]?.english || 'Loading...'}&rdquo;
-                        </p>
+                        {/* English Translation */}
+                        <div className="text-center">
+                          <p className="text-xs text-gray-700 leading-tight italic break-words whitespace-pre-wrap">
+                            &ldquo;{currentHymns[index]?.english || 'Loading...'}&rdquo;
+                          </p>
+                        </div>
                       </div>
 
                       {/* Theme and Deity */}
@@ -595,7 +602,7 @@ function TheVoices() {
                     </div>
 
                     {/* Click hint */}
-                    <div className="text-center">
+                    <div className="text-center pt-1">
                       <p className="text-xs text-amber-600">
                         Click to flip back
                       </p>
@@ -797,8 +804,8 @@ function Invitation() {
             key={i}
             className="absolute w-3 h-3 bg-amber-300/30 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 17) % 100}%`,
+              top: `${(i * 23) % 100}%`,
             }}
             animate={{
               y: [0, -40, 0],
@@ -806,9 +813,9 @@ function Invitation() {
               scale: [0.5, 1, 0.5],
             }}
             transition={{
-              duration: 6 + Math.random() * 4,
+              duration: 6 + (i % 7) * 0.5,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: (i % 5) * 0.4,
             }}
           />
         ))}
@@ -866,7 +873,7 @@ function Invitation() {
             >
               <span className="flex items-center space-x-3">
                 <BookOpen className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
-                <span>Open the Rishi's Notebook</span>
+                <span>Open the Rishi&rsquo;s Notebook</span>
                 <motion.span
                   animate={{ x: [0, 5, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -899,8 +906,6 @@ function Invitation() {
 
 // Main Homepage Component
 export default function Home() {
-  const { scrollYProgress } = useScroll();
-  const [currentScene, setCurrentScene] = useState(1);
   // Animated intro overlay state
   const [showIntro, setShowIntro] = useState(true);
 
@@ -910,16 +915,7 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Convert scroll progress to scene number
-  const sceneProgress = useTransform(scrollYProgress, [0, 0.5, 1], [1, 2, 2]);
-
-  useEffect(() => {
-    const unsubscribe = sceneProgress.onChange((latest) => {
-      setCurrentScene(Math.round(latest));
-    });
-
-    return () => unsubscribe();
-  }, [sceneProgress]);
+  // (Removed sceneProgress-to-state mapping; scenes render sequentially)
 
   return (
     <div className="relative">

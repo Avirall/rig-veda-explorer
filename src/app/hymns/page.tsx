@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Filter, Search, BookOpen, Users, Zap, Sun, Droplets, Flame } from 'lucide-react';
+import { ArrowLeft, Filter, Search, BookOpen, Users, Zap, Sun, Droplets, Flame, CloudRain } from 'lucide-react';
 import Link from 'next/link';
 
 // Comprehensive hymn data - Refreshed from authentic Rig Veda sources
@@ -446,7 +446,7 @@ export default function AllHymnsPage() {
             return (
               <motion.div
                 key={hymn.id}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-6 hover:shadow-xl transition-all duration-300"
+                className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-amber-200 p-6 hover:shadow-xl transition-all duration-300 flex flex-col"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -462,18 +462,18 @@ export default function AllHymnsPage() {
                 </div>
 
                 {/* Sanskrit Text */}
-                <div className="mb-4">
-                  <div className="text-lg font-serif text-amber-900 leading-relaxed mb-2">
+                <div className="mb-4 flex-1">
+                  <div className="text-lg font-serif text-amber-900 leading-relaxed mb-2 max-h-24 overflow-hidden">
                     {hymn.sanskrit}
                   </div>
-                  <div className="text-sm text-amber-700 italic">
+                  <div className="text-sm text-amber-700 italic max-h-12 overflow-hidden">
                     {hymn.transliteration}
                   </div>
                 </div>
 
                 {/* English Translation */}
                 <div className="mb-4">
-                  <p className="text-sm text-gray-700 leading-relaxed italic">
+                  <p className="text-sm text-gray-700 leading-relaxed italic max-h-20 overflow-hidden">
                     &ldquo;{hymn.english}&rdquo;
                   </p>
                 </div>
