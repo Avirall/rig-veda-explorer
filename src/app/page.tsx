@@ -10,13 +10,11 @@ import {
   Droplets, 
   ArrowRight,
   Trophy,
-  Star,
-  Target,
   Zap,
   TrendingUp,
   Sparkles,
-  Heart,
-  CheckCircle2
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import Link from 'next/link';
 import { AnimatePresence } from 'framer-motion';
@@ -378,7 +376,7 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
       {/* Animated circular mandala lines */}
       <motion.div className="absolute inset-0 flex items-center justify-center opacity-20">
         {[...Array(8)].map((_, i) => (
-          <motion.div
+        <motion.div
             key={i}
             className="absolute rounded-full border border-emerald-400/30"
             style={{
@@ -441,7 +439,7 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
             >
               <div className="text-5xl font-bold bg-gradient-to-r from-emerald-300 to-teal-300 bg-clip-text text-transparent mb-2">
                 10
-              </div>
+            </div>
               <div className="text-sm text-slate-400 mb-2">Mandalas</div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <motion.div
@@ -451,7 +449,7 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
                   transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
                   viewport={{ once: true }}
                 />
-              </div>
+            </div>
             </motion.div>
 
             <motion.div 
@@ -461,7 +459,7 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
             >
               <div className="text-5xl font-bold bg-gradient-to-r from-teal-300 to-cyan-300 bg-clip-text text-transparent mb-2">
                 1,028
-              </div>
+            </div>
               <div className="text-sm text-slate-400 mb-2">
                 <span suppressHydrationWarning>
                   Hymns • {isMounted ? stats.versesRead : 0} explored
@@ -474,8 +472,8 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
                   animate={{ width: isMounted ? `${progressPercentage}%` : '0%' }}
                   transition={{ duration: 1, ease: "easeOut" }}
                 />
-              </div>
-            </motion.div>
+          </div>
+        </motion.div>
 
             <motion.div 
               className="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-emerald-500/20"
@@ -484,7 +482,7 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
             >
               <div className="text-5xl font-bold bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent mb-2">
                 10,000
-              </div>
+      </div>
               <div className="text-sm text-slate-400 mb-2">Verses of wisdom</div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <motion.div
@@ -524,6 +522,7 @@ function TheRigVeda({ stats }: { stats: ReturnType<typeof useGamification>['stat
 function TheVoices() {
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [playingCard, setPlayingCard] = useState<number | null>(null);
   const [currentHymns, setCurrentHymns] = useState<Record<number, {
     sanskrit: string;
     transliteration: string;
@@ -729,6 +728,50 @@ function TheVoices() {
     });
   };
 
+  const handlePlayHymn = (index: number, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent card flip when clicking play button
+    
+    const hymn = currentHymns[index];
+    if (!hymn) return;
+
+    // Stop any currently playing speech
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+
+    // If already playing this card, stop
+    if (playingCard === index) {
+      setPlayingCard(null);
+      return;
+    }
+
+    // Speak the hymn
+    const textToSpeak = `${hymn.transliteration}. ${hymn.english}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    
+    // Configure speech
+    utterance.rate = 0.8; // Slower for clarity
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    
+    // Set language to English for better pronunciation
+    utterance.lang = 'en-US';
+
+    utterance.onstart = () => {
+      setPlayingCard(index);
+    };
+
+    utterance.onend = () => {
+      setPlayingCard(null);
+    };
+
+    utterance.onerror = () => {
+      setPlayingCard(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
   return (
     <motion.div
       className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden"
@@ -858,7 +901,7 @@ function TheVoices() {
                       hoveredCard === index ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
-                </div>
+                  </div>
                 
                 {/* Back Face - Hymn Content */}
                 <div
@@ -874,16 +917,36 @@ function TheVoices() {
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-fuchsia-500/10 rounded-3xl" />
                   
                   <div className="relative h-full flex flex-col justify-between">
-                    {/* Hymn Header */}
+                    {/* Hymn Header with Play Button */}
                     <div className="text-center mb-3">
-                      <h3 className="text-lg font-serif text-white mb-1">
-                        {rishi.name}&apos;s Hymn
-                      </h3>
+                      <div className="flex items-center justify-center space-x-2 mb-1">
+                        <h3 className="text-lg font-serif text-white">
+                          {rishi.name}&apos;s Hymn
+                        </h3>
+                        {currentHymns[index] && (
+                          <motion.button
+                            onClick={(e) => handlePlayHymn(index, e)}
+                            className={`p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${
+                              playingCard === index
+                                ? 'bg-emerald-500/30 border border-emerald-500/50'
+                                : 'bg-white/10 border border-white/20 hover:bg-white/20'
+                            }`}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            {playingCard === index ? (
+                              <VolumeX className="w-4 h-4 text-emerald-300" />
+                            ) : (
+                              <Volume2 className="w-4 h-4 text-white/70" />
+                            )}
+                          </motion.button>
+                        )}
+                      </div>
                       <p className="text-xs text-purple-200/80">
                         {currentHymns[index]?.reference || 'Loading...'}
                       </p>
-                    </div>
-
+                </div>
+                
                     {/* Content Area */}
                     <div className="flex-1 flex flex-col justify-start overflow-hidden">
                       <div className="space-y-1.5 overflow-auto max-h-44 pr-1 scrollbar-thin">
@@ -1016,7 +1079,7 @@ function TheThemes() {
       {/* Floating theme emojis */}
       <div className="absolute inset-0">
         {themes.map((theme, i) => (
-          <motion.div
+        <motion.div
             key={theme.name}
             className="absolute text-4xl opacity-20"
             style={{
@@ -1048,11 +1111,6 @@ function TheThemes() {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
         >
-          <h2 className="text-6xl md:text-8xl font-serif mb-8 leading-tight tracking-tight">
-            <span className="bg-gradient-to-r from-red-200 via-orange-200 to-yellow-200 bg-clip-text text-transparent">
-              The Themes
-            </span>
-          </h2>
           <p className="text-xl md:text-2xl text-slate-300 mb-16 font-light max-w-3xl mx-auto leading-relaxed">
             They sang of fire, rain, light, rivers, truth.
           </p>
@@ -1090,11 +1148,11 @@ function TheThemes() {
                 {/* Icon */}
                 <motion.div
                   className="relative mb-6"
-                  animate={{
+                  animate={{ 
                     rotate: [0, 5, -5, 0],
                     scale: [1, 1.1, 1],
                   }}
-                  transition={{
+                  transition={{ 
                     duration: 4,
                     repeat: Infinity,
                     ease: "easeInOut",
@@ -1105,7 +1163,7 @@ function TheThemes() {
                     <Icon className={`w-10 h-10 ${colorClasses.icon}`} />
                   </div>
                 </motion.div>
-
+                
                 {/* Content */}
                 <h3 className={`text-2xl font-serif ${colorClasses.text} mb-2 relative`}>
                   {theme.name}
@@ -1127,18 +1185,6 @@ function TheThemes() {
           })}
         </div>
 
-        {/* CTA */}
-        <motion.div
-          className="mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-slate-400 text-sm">
-            Discover the timeless themes that connect us to ancient wisdom
-          </p>
-        </motion.div>
       </div>
     </motion.div>
   );
@@ -1160,7 +1206,7 @@ function Invitation() {
       {/* Animated stars/sparkles */}
       <div className="absolute inset-0">
         {[...Array(50)].map((_, i) => (
-          <motion.div
+        <motion.div
             key={i}
             className="absolute w-1 h-1 bg-white rounded-full"
             style={{
@@ -1195,46 +1241,17 @@ function Invitation() {
             }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            <span className="bg-gradient-to-r from-indigo-200 via-purple-200 to-blue-200 bg-clip-text text-transparent">
-              Step into their world
-            </span>
           </motion.h2>
           
           <motion.p 
-            className="text-xl md:text-2xl text-slate-300 mb-8 font-light max-w-3xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl text-slate-300 mb-16 font-light max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            One verse a day. Build your streak. Unlock achievements.
+            One verse a day.
           </motion.p>
-
-          {/* Gamification teaser */}
-          <motion.div
-            className="flex flex-wrap justify-center gap-4 mb-12"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            viewport={{ once: true }}
-          >
-            <div className="flex items-center space-x-2 bg-white/5 backdrop-blur-xl border border-orange-500/30 rounded-full px-4 py-2">
-              <Flame className="w-4 h-4 text-orange-400" />
-              <span className="text-sm text-white">Daily Streaks</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/5 backdrop-blur-xl border border-amber-500/30 rounded-full px-4 py-2">
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-white">Achievements</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/5 backdrop-blur-xl border border-emerald-500/30 rounded-full px-4 py-2">
-              <Target className="w-4 h-4 text-emerald-400" />
-              <span className="text-sm text-white">Track Progress</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-white/5 backdrop-blur-xl border border-pink-500/30 rounded-full px-4 py-2">
-              <Heart className="w-4 h-4 text-pink-400" />
-              <span className="text-sm text-white">Save Favorites</span>
-            </div>
-          </motion.div>
 
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
@@ -1243,7 +1260,7 @@ function Invitation() {
             viewport={{ once: true }}
           >
             <Link href="/notebook">
-              <motion.button
+            <motion.button
                 className="group relative bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white text-xl font-semibold px-12 py-6 rounded-full overflow-hidden"
                 whileHover={{ 
                   scale: 1.05,
@@ -1269,32 +1286,8 @@ function Invitation() {
                     →
                   </motion.span>
                 </span>
-              </motion.button>
+            </motion.button>
             </Link>
-          </motion.div>
-
-          <motion.div
-            className="mt-16"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.8 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-slate-400 mb-6">Discover the wisdom of 3,500 years</p>
-            <div className="flex flex-wrap justify-center gap-6 text-xs text-slate-500">
-              <span className="flex items-center space-x-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span>No Ads • Forever Free</span>
-              </span>
-              <span className="flex items-center space-x-2">
-                <Star className="w-4 h-4 text-amber-500" />
-                <span>Authentic Sanskrit Texts</span>
-              </span>
-              <span className="flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-purple-500" />
-                <span>Daily Inspiration</span>
-              </span>
-            </div>
           </motion.div>
         </motion.div>
       </div>
@@ -1353,7 +1346,7 @@ export default function Home() {
       {/* Intro Overlay - blocks scrolling when visible */}
       <AnimatePresence>
         {showIntro && (
-          <motion.div
+        <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 text-center cursor-pointer"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
@@ -1390,8 +1383,8 @@ export default function Home() {
               >
                 Click anywhere to skip
               </motion.p>
-            </div>
-          </motion.div>
+          </div>
+        </motion.div>
         )}
       </AnimatePresence>
       
