@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "refresh:dataset": "node ./scripts/refresh_dataset.mjs"
   },
   "dependencies": {
     "@next/font": "^14.2.15",
