@@ -95,7 +95,7 @@ function DailyDoseModal({ isVisible, onClose, onNext }: {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -108,60 +108,60 @@ function DailyDoseModal({ isVisible, onClose, onNext }: {
             initial={{ scale: 0.8, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            {/* Dawn gradient card */}
-            <div className="relative bg-gradient-to-br from-yellow-100 via-rose-100 to-indigo-100 rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
-              {/* Paper texture overlay */}
-              <div className="absolute inset-0 bg-paper-texture opacity-30"></div>
+            {/* Modern glassmorphic card */}
+            <div className="relative bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 overflow-hidden shadow-[0_30px_80px_rgba(8,47,73,0.45)]">
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-cyan-500/10"></div>
               
-              {/* Ink brush marks */}
-              <div className="absolute top-4 right-4 w-8 h-8 bg-amber-200/20 rounded-full blur-sm"></div>
-              <div className="absolute bottom-6 left-6 w-6 h-6 bg-rose-200/20 rounded-full blur-sm"></div>
-              <div className="absolute top-1/2 right-8 w-4 h-4 bg-indigo-200/20 rounded-full blur-sm"></div>
+              {/* Floating particles */}
+              <div className="absolute top-4 right-4 w-8 h-8 bg-emerald-400/10 rounded-full blur-sm"></div>
+              <div className="absolute bottom-6 left-6 w-6 h-6 bg-cyan-400/10 rounded-full blur-sm"></div>
+              <div className="absolute top-1/2 right-8 w-4 h-4 bg-teal-400/10 rounded-full blur-sm"></div>
               
               {/* Content */}
               <div className="relative z-10 p-8">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-2">
-                    <Sparkles className="w-5 h-5 text-amber-600" />
-                    <h3 className="text-lg font-semibold text-gray-800">Today's Light</h3>
+                    <Sparkles className="w-5 h-5 text-emerald-400" />
+                    <h3 className="text-lg font-semibold text-white">Today's Light</h3>
                   </div>
                   <button
                     onClick={onClose}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors duration-200"
+                    className="p-2 hover:bg-white/10 rounded-full transition-all duration-300"
                   >
-                    <X className="w-5 h-5 text-gray-600" />
+                    <X className="w-5 h-5 text-slate-300" />
                   </button>
                 </div>
 
                 {/* Sanskrit text */}
                 <div className="mb-6">
-                  <div className="text-2xl font-serif text-gray-800 leading-relaxed mb-3">
+                  <div className="text-2xl font-serif text-emerald-200 leading-relaxed mb-3">
                     {currentVerse.sanskrit}
                   </div>
-                  <div className="text-sm text-gray-600 italic">
+                  <div className="text-sm text-teal-200/80 italic">
                     {currentVerse.transliteration}
                   </div>
                 </div>
 
                 {/* English translation */}
                 <div className="mb-6">
-                  <div className="text-lg text-gray-700 leading-relaxed mb-2">
+                  <div className="text-lg text-slate-100 leading-relaxed mb-2">
                     "{currentVerse.english}"
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-slate-400">
                     — {currentVerse.reference} ({currentVerse.rishi} to {currentVerse.deity})
                   </div>
                 </div>
 
                 {/* Meaning */}
-                <div className="mb-8 p-4 bg-white/30 rounded-lg border border-white/40">
+                <div className="mb-8 p-4 bg-white/5 rounded-2xl border border-white/10">
                   <div className="flex items-start space-x-2">
                     <span className="text-lg">🕊️</span>
-                    <div className="text-sm text-gray-700 italic">
-                      <strong>Meaning in one line:</strong> {currentVerse.meaning}
+                    <div className="text-sm text-slate-200 italic">
+                      <strong className="text-emerald-300">Meaning in one line:</strong> {currentVerse.meaning}
                     </div>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ function DailyDoseModal({ isVisible, onClose, onNext }: {
                 <div className="flex items-center justify-between">
                   <motion.button
                     onClick={handleNextVerse}
-                    className="flex items-center space-x-2 text-amber-700 hover:text-amber-800 font-medium transition-colors duration-200"
+                    className="flex items-center space-x-2 text-emerald-300 hover:text-emerald-200 font-medium transition-colors duration-300"
                     whileHover={{ x: 5 }}
                   >
                     <span>Next Verse</span>
@@ -179,13 +179,13 @@ function DailyDoseModal({ isVisible, onClose, onNext }: {
 
                   <motion.button
                     onClick={copyAsMantra}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
                       copied 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-white/40 hover:bg-white/60 text-gray-700'
+                        ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-400/30' 
+                        : 'bg-white/10 hover:bg-white/15 text-slate-200 border border-white/10'
                     }`}
                     whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <Copy className="w-4 h-4" />
                     <span className="text-sm font-medium">
@@ -207,22 +207,23 @@ function FloatingWidgetButton({ onClick }: { onClick: () => void }) {
   return (
     <motion.button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 bg-gradient-to-br from-yellow-100 via-rose-100 to-indigo-100 rounded-full p-4 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 group"
-      whileHover={{ scale: 1.1 }}
+      className="fixed bottom-6 right-6 z-40 bg-white/10 backdrop-blur-xl rounded-full p-4 border border-white/20 hover:border-emerald-400/60 transition-all duration-500 group overflow-hidden"
+      whileHover={{ scale: 1.15 }}
       whileTap={{ scale: 0.95 }}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ 
         scale: 1, 
         opacity: 1,
         boxShadow: [
-          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-          "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-          "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+          "0 20px 40px rgba(16, 185, 129, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+          "0 25px 60px rgba(16, 185, 129, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.3)",
+          "0 20px 40px rgba(16, 185, 129, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1)"
         ]
       }}
       transition={{ 
         delay: 2, 
-        duration: 0.5,
+        duration: 0.6,
+        ease: [0.34, 1.56, 0.64, 1],
         boxShadow: {
           duration: 3,
           repeat: Infinity,
@@ -230,16 +231,16 @@ function FloatingWidgetButton({ onClick }: { onClick: () => void }) {
         }
       }}
     >
-      {/* Paper texture overlay */}
-      <div className="absolute inset-0 bg-paper-texture opacity-20 rounded-full"></div>
+      {/* Gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-cyan-500/20 rounded-full"></div>
       
       {/* Icon */}
       <div className="relative z-10">
-        <Sparkles className="w-6 h-6 text-amber-600 group-hover:text-amber-700 transition-colors duration-200" />
+        <Sparkles className="w-6 h-6 text-emerald-300 group-hover:text-emerald-200 transition-colors duration-300" />
       </div>
       
-      {/* Subtle glow effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-200/30 via-rose-200/30 to-indigo-200/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      {/* Glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/30 via-teal-400/20 to-cyan-400/30 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
     </motion.button>
   );
 }

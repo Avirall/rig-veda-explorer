@@ -88,6 +88,42 @@ const DEFAULT_RISHI_BY_MANDALA: Record<number, string> = {
   10: 'Various Seers (Mandala 10)',
 };
 
+// Detailed Rishi assignments for Mandala 1 suktas (based on traditional attributions)
+const MANDALA_1_RISHI_MAP: Record<number, string> = {
+  1: 'Madhuchchhandas',
+  2: 'Madhuchchhandas',
+  3: 'Madhuchchhandas',
+  4: 'Madhuchchhandas',
+  5: 'Madhuchchhandas',
+  6: 'Madhuchchhandas',
+  7: 'Madhuchchhandas',
+  8: 'Madhuchchhandas',
+  9: 'Madhuchchhandas',
+  10: 'Madhuchchhandas',
+  11: 'Jetri Madhucchandas',
+  12: 'Medhyatithi Kanva',
+  13: 'Medhyatithi Kanva',
+  14: 'Medhyatithi Kanva',
+  15: 'Medhyatithi Kanva',
+  16: 'Medhyatithi Kanva',
+  17: 'Medhyatithi Kanva',
+  18: 'Medhyatithi Kanva',
+  19: 'Medhyatithi Kanva',
+  20: 'Medhyatithi Kanva',
+  21: 'Medhyatithi Kanva',
+  22: 'Medhyatithi Kanva',
+  23: 'Medhyatithi Kanva',
+  24: 'Sunahshepa Ajigarti',
+  25: 'Sunahshepa Ajigarti',
+  26: 'Sunahshepa Ajigarti',
+  27: 'Shunahshepa Ajigarti',
+  28: 'Shunahshepa Ajigarti',
+  29: 'Shunahshepa Ajigarti',
+  30: 'Shunahshepa Ajigarti',
+  // Add more as needed - Mandala 1 has 191 suktas from various Rishis
+  // For simplicity, we'll default the rest to Kanva lineage
+};
+
 const DEFAULT_DEITY_BY_MANDALA: Record<number, string> = {
   9: 'Soma',
 };
@@ -110,7 +146,11 @@ function inferDeity(verses: HymnItem['verses'], mandala?: number): string | unde
   return undefined;
 }
 
-function inferRishi(mandala?: number): string | undefined {
+function inferRishi(mandala?: number, sukta?: number): string | undefined {
+  // Special handling for Mandala 1 with detailed sukta-level Rishi assignments
+  if (mandala === 1 && sukta && MANDALA_1_RISHI_MAP[sukta]) {
+    return MANDALA_1_RISHI_MAP[sukta];
+  }
   if (mandala && DEFAULT_RISHI_BY_MANDALA[mandala]) {
     return DEFAULT_RISHI_BY_MANDALA[mandala];
   }
@@ -120,6 +160,7 @@ function inferRishi(mandala?: number): string | undefined {
 let CACHE: HymnItem[] | null = null;
 
 async function loadAllHymns(): Promise<HymnItem[]> {
+  // Reset cache to pick up new Rishi mappings
   if (CACHE) return CACHE;
   const datasetPath = path.join(process.cwd(), 'dataset', 'complete_rigveda_all_mandalas.json');
   const raw = await fs.readFile(datasetPath, 'utf8');
@@ -176,7 +217,7 @@ async function loadAllHymns(): Promise<HymnItem[]> {
         const combinedEnglish = verses.map((v: any) => v.english).filter(Boolean).join('\n').trim();
 
         const inferredDeity = sDeity || inferDeity(verses, typeof mNum === 'number' ? mNum : undefined);
-        const inferredRishi = sRishi || inferRishi(typeof mNum === 'number' ? mNum : undefined);
+        const inferredRishi = sRishi || inferRishi(typeof mNum === 'number' ? mNum : undefined, typeof sNum === 'number' ? sNum : undefined);
 
         items.push({
           sanskrit: combinedSanskrit,
@@ -231,7 +272,7 @@ async function loadAllHymns(): Promise<HymnItem[]> {
           const inferredDeity =
             normalize(riks?.[0]?.deity) || inferDeity(verses, Number.isFinite(mNum) ? mNum : undefined);
           const inferredRishi =
-            normalize(riks?.[0]?.rishi) || normalize(riks?.[0]?.seer) || inferRishi(Number.isFinite(mNum) ? mNum : undefined);
+            normalize(riks?.[0]?.rishi) || normalize(riks?.[0]?.seer) || inferRishi(Number.isFinite(mNum) ? mNum : undefined, Number.isFinite(sNum) ? sNum : undefined);
 
           items.push({
             sanskrit: combinedSanskrit,

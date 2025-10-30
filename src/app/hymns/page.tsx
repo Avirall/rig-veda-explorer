@@ -389,18 +389,18 @@ export default function AllHymnsPage() {
 
                 {/* Footer */}
                 <div className="relative border-t border-white/10 pt-4">
-                  <div className="flex items-center justify-between text-xs text-slate-200/80">
-                    <div className="flex items-center space-x-3">
-                      <span className="flex items-center space-x-1">
-                        <Users className="h-3 w-3" />
-                        <span>{hymn.rishi || 'Various Seers'}</span>
+                  <div className="flex items-center justify-between gap-2 text-xs text-slate-200/80">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <span className="flex items-center space-x-1 min-w-0">
+                        <Users className="h-3 w-3 flex-shrink-0" />
+                        <span className="truncate">{hymn.rishi || 'Various Seers'}</span>
                       </span>
-                      <span className="flex items-center space-x-1">
+                      <span className="flex items-center space-x-1 flex-shrink-0">
                         <Hash className="h-3 w-3" />
                         <span>M.{hymn.mandala ?? '—'}{hymn.sukta ? ` · S.${hymn.sukta}` : ''}</span>
                       </span>
                     </div>
-                    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 font-medium text-emerald-200/90">
+                    <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 font-medium text-emerald-200/90 flex-shrink-0 text-xs whitespace-nowrap">
                       {hymn.versesCount || 0} verses
                     </span>
                   </div>

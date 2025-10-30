@@ -2,11 +2,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fefefe;
-  --foreground: #1a1a1a;
-  --paper: #f8f6f0;
-  --accent: #8b5a2b;
-  --accent-light: #d4a574;
+  --background: #020617;
+  --foreground: #f1f5f9;
+  --paper: #1e293b;
+  --accent: #10b981;
+  --accent-light: #6ee7b7;
 }
 
 @theme inline {
@@ -16,35 +16,65 @@
   --font-serif: 'Noto Serif Devanagari', serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #0f172a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #10b981, #059669);
+  border-radius: 5px;
+  border: 2px solid #0f172a;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: linear-gradient(180deg, #34d399, #10b981);
 }
 
-/* Smooth transitions */
-* {
-  transition: all 0.3s ease;
+/* Thin scrollbar for smaller areas */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* Overflow wrap utility */
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
 }
 
 /* Custom gradients for themes */
