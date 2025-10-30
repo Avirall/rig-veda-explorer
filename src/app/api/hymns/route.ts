@@ -12,11 +12,109 @@ type HymnItem = {
   theme?: string;
   mandala?: number;
   sukta?: number;
-  rik?: number;
+  versesCount: number;
+  verses: Array<{
+    sanskrit: string;
+    transliteration: string;
+    english: string;
+  }>;
 };
 
 function normalize(str: unknown): string {
   return typeof str === 'string' ? str : '';
+}
+
+function stripDiacritics(input: string): string {
+  return input
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z]/g, '')
+    .toLowerCase();
+}
+
+const DEITY_MAP: Record<string, string> = {
+  agni: 'Agni',
+  agnim: 'Agni',
+  indra: 'Indra',
+  indram: 'Indra',
+  soma: 'Soma',
+  somam: 'Soma',
+  savitar: 'Savitr',
+  savitr: 'Savitr',
+  savita: 'Savitr',
+  ushas: 'Ushas',
+  uşas: 'Ushas',
+  ushah: 'Ushas',
+  surya: 'Surya',
+  suryam: 'Surya',
+  varuna: 'Varuna',
+  mitra: 'Mitra',
+  marut: 'Maruts',
+  maruts: 'Maruts',
+  ashvin: 'Ashvins',
+  asvin: 'Ashvins',
+  aswins: 'Ashvins',
+  rudra: 'Rudra',
+  vishnu: 'Vishnu',
+  visnu: 'Vishnu',
+  pushan: 'Pushan',
+  pusan: 'Pushan',
+  aditi: 'Aditi',
+  sarasvati: 'Sarasvati',
+  prthivi: 'Prithivi',
+  prithivi: 'Prithivi',
+  brahmanaspati: 'Brihaspati',
+  brihaspati: 'Brihaspati',
+  rbhus: 'Rbhus',
+  tvastr: 'Tvastr',
+  tvashta: 'Tvastr',
+  dyava: 'Dyava-Prithivi',
+  dyavaprthivi: 'Dyava-Prithivi',
+  yama: 'Yama',
+  kubera: 'Kubera',
+  hiraNyagarbha: 'Hiranyagarbha',
+};
+
+const DEFAULT_RISHI_BY_MANDALA: Record<number, string> = {
+  1: 'Various Seers (Mandala 1)',
+  2: 'Gritsamada Angirasa',
+  3: 'Vishvamitra',
+  4: 'Vamadeva Gotama',
+  5: 'Atri',
+  6: 'Bharadvaja',
+  7: 'Vasistha',
+  8: 'Kanva',
+  9: 'Various Soma Chanters',
+  10: 'Various Seers (Mandala 10)',
+};
+
+const DEFAULT_DEITY_BY_MANDALA: Record<number, string> = {
+  9: 'Soma',
+};
+
+function inferDeity(verses: HymnItem['verses'], mandala?: number): string | undefined {
+  for (const verse of verses.slice(0, 3)) {
+    const words = (verse.transliteration || verse.sanskrit)
+      .split(/\s+/)
+      .map(stripDiacritics)
+      .filter(Boolean);
+    for (const word of words) {
+      if (DEITY_MAP[word]) {
+        return DEITY_MAP[word];
+      }
+    }
+  }
+  if (mandala && DEFAULT_DEITY_BY_MANDALA[mandala]) {
+    return DEFAULT_DEITY_BY_MANDALA[mandala];
+  }
+  return undefined;
+}
+
+function inferRishi(mandala?: number): string | undefined {
+  if (mandala && DEFAULT_RISHI_BY_MANDALA[mandala]) {
+    return DEFAULT_RISHI_BY_MANDALA[mandala];
+  }
+  return undefined;
 }
 
 let CACHE: HymnItem[] | null = null;
@@ -41,18 +139,57 @@ async function loadAllHymns(): Promise<HymnItem[]> {
         const riks = Array.isArray(s?.riks) ? s.riks : [];
         for (const v of riks) {
           const vNum = v?.number ?? v?.rik_number;
-          items.push({
-            sanskrit: normalize(v?.samhita) || normalize(v?.devanagari) || normalize(v?.samhita?.devanagari?.text),
-            transliteration: normalize(v?.padapatha_transliteration) || normalize(v?.transliteration) || normalize(v?.padapatha?.transliteration?.text),
-            english: normalize(v?.english) || normalize(v?.translation),
-            reference: `Rig Veda ${mNum}.${sNum}.${vNum}`,
-            rishi: sRishi,
-            deity: sDeity,
-            mandala: typeof mNum === 'number' ? mNum : undefined,
-            sukta: typeof sNum === 'number' ? sNum : undefined,
-            rik: typeof vNum === 'number' ? vNum : undefined,
-          });
+          // collect verses for this sukta once outside loop
         }
+      }
+    }
+    // remake as suktas
+    for (const m of json.mandalas) {
+      const mNum = m?.number;
+      const suktas = Array.isArray(m?.suktas) ? m.suktas : [];
+      for (const s of suktas) {
+        const sNum = s?.number;
+        const sRishi = normalize(s?.rishi);
+        const sDeity = normalize(s?.deity);
+        const riks = Array.isArray(s?.riks) ? s.riks : [];
+        const verses = riks
+          .map((v: any) => ({
+            sanskrit: normalize(v?.samhita) || normalize(v?.devanagari) || normalize(v?.samhita?.devanagari?.text),
+            transliteration:
+              normalize(v?.padapatha_transliteration) ||
+              normalize(v?.transliteration) ||
+              normalize(v?.padapatha?.transliteration?.text),
+            english: normalize(v?.english) || normalize(v?.translation),
+          }))
+          .filter((v: any) => v.sanskrit || v.transliteration || v.english);
+
+        if (!verses.length) {
+          continue;
+        }
+
+        const combinedSanskrit = verses.map((v: any) => v.sanskrit).filter(Boolean).join('\n').trim();
+        const combinedTransliteration = verses
+          .map((v: any) => v.transliteration)
+          .filter(Boolean)
+          .join('\n')
+          .trim();
+        const combinedEnglish = verses.map((v: any) => v.english).filter(Boolean).join('\n').trim();
+
+        const inferredDeity = sDeity || inferDeity(verses, typeof mNum === 'number' ? mNum : undefined);
+        const inferredRishi = sRishi || inferRishi(typeof mNum === 'number' ? mNum : undefined);
+
+        items.push({
+          sanskrit: combinedSanskrit,
+          transliteration: combinedTransliteration,
+          english: combinedEnglish,
+          reference: `Rig Veda ${mNum}.${sNum}`,
+          rishi: inferredRishi,
+          deity: inferredDeity,
+          mandala: typeof mNum === 'number' ? mNum : undefined,
+          sukta: typeof sNum === 'number' ? sNum : undefined,
+          versesCount: verses.length,
+          verses,
+        });
       }
     }
     CACHE = items;
@@ -68,20 +205,46 @@ async function loadAllHymns(): Promise<HymnItem[]> {
       for (const [sKey, riks] of suktaEntries as [string, any[]][]) {
         const sNum = parseInt((sKey.match(/(\d+)/)?.[1]) || '');
         if (Array.isArray(riks)) {
-          for (const v of riks) {
-            const vNum = v?.number ?? v?.rik_number;
-            items.push({
+          const verses = riks
+            .map((v: any) => ({
               sanskrit: normalize(v?.samhita?.devanagari?.text) || normalize(v?.samhita) || normalize(v?.devanagari),
-              transliteration: normalize(v?.padapatha?.transliteration?.text) || normalize(v?.transliteration) || normalize(v?.padapatha_transliteration),
+              transliteration:
+                normalize(v?.padapatha?.transliteration?.text) ||
+                normalize(v?.transliteration) ||
+                normalize(v?.padapatha_transliteration),
               english: normalize(v?.english) || normalize(v?.translation),
-              reference: `Rig Veda ${mNum}.${sNum}.${vNum}`,
-              rishi: normalize(v?.rishi),
-              deity: normalize(v?.deity),
-              mandala: Number.isFinite(mNum) ? mNum : undefined,
-              sukta: Number.isFinite(sNum) ? sNum : undefined,
-              rik: typeof vNum === 'number' ? vNum : undefined,
-            });
+            }))
+            .filter((v: any) => v.sanskrit || v.transliteration || v.english);
+
+          if (!verses.length) {
+            continue;
           }
+
+          const combinedSanskrit = verses.map((v: any) => v.sanskrit).filter(Boolean).join('\n').trim();
+          const combinedTransliteration = verses
+            .map((v: any) => v.transliteration)
+            .filter(Boolean)
+            .join('\n')
+            .trim();
+          const combinedEnglish = verses.map((v: any) => v.english).filter(Boolean).join('\n').trim();
+
+          const inferredDeity =
+            normalize(riks?.[0]?.deity) || inferDeity(verses, Number.isFinite(mNum) ? mNum : undefined);
+          const inferredRishi =
+            normalize(riks?.[0]?.rishi) || normalize(riks?.[0]?.seer) || inferRishi(Number.isFinite(mNum) ? mNum : undefined);
+
+          items.push({
+            sanskrit: combinedSanskrit,
+            transliteration: combinedTransliteration,
+            english: combinedEnglish,
+            reference: `Rig Veda ${mNum}.${sNum}`,
+            rishi: inferredRishi,
+            deity: inferredDeity,
+            mandala: Number.isFinite(mNum) ? mNum : undefined,
+            sukta: Number.isFinite(sNum) ? sNum : undefined,
+            versesCount: verses.length,
+            verses,
+          });
         }
       }
     }
