@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Sun, BookOpen, Flame, CloudRain, Droplets, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { AnimatePresence } from 'framer-motion';
 
 // Scene 1: Dawn Appears
 function DawnAppears() {
@@ -900,6 +901,14 @@ function Invitation() {
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const [currentScene, setCurrentScene] = useState(1);
+  // Animated intro overlay state
+  const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    // Hide intro after 3.5s (text in/out)
+    const timer = setTimeout(() => setShowIntro(false), 3500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Convert scroll progress to scene number
   const sceneProgress = useTransform(scrollYProgress, [0, 0.5, 1], [1, 2, 2]);
@@ -914,6 +923,27 @@ export default function Home() {
 
   return (
     <div className="relative">
+      {/* Intro Overlay */}
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-b from-purple-100 via-amber-100 to-orange-50 text-center"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 1.2 } }}
+            style={{ pointerEvents: 'auto' }}
+          >
+            <motion.p
+              className="text-3xl md:text-5xl font-serif text-amber-900 mx-auto px-6 leading-snug drop-shadow-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: [0, 1, 1, 0], y: [20, 0, 0, -20] }}
+              transition={{ duration: 2.8, times: [0, 0.15, 0.85, 1], ease: 'easeInOut' }}
+            >
+              Long before writing, the sages spoke their poems to the dawn.
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Background with paper texture */}
       <div className="fixed inset-0 bg-paper-texture opacity-20" />
       
